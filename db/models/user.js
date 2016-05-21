@@ -2,7 +2,7 @@
  * Created by Ivan on 17.05.2016.
  */
 var Sequelize = require('Sequelize');
-var bcrypt = require('bcryptjs');
+//var bcrypt = require('bcryptjs');
 
 module.exports = function (sequelize, DataTypes) {
     var User = sequelize.define('User', {
@@ -40,7 +40,7 @@ module.exports = function (sequelize, DataTypes) {
 
             afterValidate: function (user) {
                 if (user.password) {
-                    user.password = bcrypt.hashSync(user.password, 8);
+                   // user.password = bcrypt.hashSync(user.password, 8);
                 }
             }
         },

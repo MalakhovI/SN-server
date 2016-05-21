@@ -3,8 +3,17 @@ var bodyParser = require('body-parser');
 var express = require('express'),
     //config = require('./config/config'),
     db = require('./db/index');
+///----------------------------------------------------------------
+var jwt = require('jsonwebtoken');
+var expressJWT = require('express-jwt');
+///----------------------------------------------------------------
 
 var app = express();
+
+///----------------------------------------------------------------
+//app.use(expressJWT({secret:'verySecretWord'}).unless({path:['/sigIn','/addUsername']}))
+//app.use(expressJWT({secret:'verySecretWord'}));
+///----------------------------------------------------------------
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(allowCrossDomain);
@@ -31,6 +40,8 @@ function allowCrossDomain(req, res, next) {
 
 // Expose app
 exports = module.exports = app;
+
+//module.exports = app;
 app.set('db', db);
 
 
