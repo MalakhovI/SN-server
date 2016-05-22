@@ -3,6 +3,8 @@ var bodyParser = require('body-parser');
 var express = require('express'),
     //config = require('./config/config'),
     db = require('./db/index');
+var cookieParser = require('cookie-parser');
+var busboy = require('connect-busboy');
 ///----------------------------------------------------------------
 var jwt = require('jsonwebtoken');
 var expressJWT = require('express-jwt');
@@ -17,7 +19,9 @@ var app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(allowCrossDomain);
-
+app.use(cookieParser());
+app.set('db', db);
+app.use(busboy());
 
 var server = require('http').createServer(app);
 
@@ -42,10 +46,6 @@ function allowCrossDomain(req, res, next) {
 exports = module.exports = app;
 
 //module.exports = app;
-app.set('db', db);
-
-
-
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////

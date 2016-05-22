@@ -2,7 +2,7 @@
  * Created by Ivan on 17.05.2016.
  */
 var Sequelize = require('Sequelize');
-//var bcrypt = require('bcryptjs');
+var bcrypt = require('bcryptjs');
 
 module.exports = function (sequelize, DataTypes) {
     var User = sequelize.define('User', {
@@ -40,10 +40,25 @@ module.exports = function (sequelize, DataTypes) {
 
             afterValidate: function (user) {
                 if (user.password) {
-                   // user.password = bcrypt.hashSync(user.password, 8);
+                    user.password = bcrypt.hashSync(user.password, 8);
                 }
             }
         },
+      instanceMethods: {
+        comparePassword: function (passw, cb) {
+          bcrypt.compare(passw, this.password, function (err, isMatch) {
+            if (err) {
+              return cb(err);
+            }
+            cb(null, isMatch);
+          });
+        }
+       },
+      classMethods: {
+        associate: function (models) {
+          User.hasMany(models.News);
+        }
+      },
         freezeTableName: true // Model tableName will be the same as the model name
     });
 

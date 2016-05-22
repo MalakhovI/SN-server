@@ -13,6 +13,7 @@ module.exports = function(app) {
 
     // Insert routes below
     app.use('/users', require('./controler/user'));
+    app.use('/news', require('./controler/news'));
 
     // All undefined asset or controler routes should return a 404
     app.route('/:url(controler|auth|components|app|bower_components|assets)/*')
