@@ -5,7 +5,7 @@ var fs = require('fs');
 var path = require('path');
 var Sequelize = require('Sequelize');
 
-var sequelize = new Sequelize('UserDB', 'Ivan', 'bars+951', {
+var sequelize = new Sequelize('UserDB', 'Malakhov_Ivan', 'bars+951', {
     host: 'localhost',
     dialect: 'postgres',
 
@@ -36,11 +36,13 @@ module.exports = db;
 
 // ---- Create a Table User with a test record---------------------------------
 //
-//db.sequelize.sync(
-//  {force: true},// - For removed and create Tabel UserDB
-//  {logger: console.log}
-//);
+//
+//
 /*
+db.sequelize.sync(
+  {force: true},// - For removed and create Tabel UserDB
+  {logger: console.log}
+)
 .then(function(){
     db.User.create({
           firstName:'Rumata',
