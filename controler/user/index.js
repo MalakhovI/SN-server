@@ -23,14 +23,15 @@ router.put('/updateUserProf', function(req, res) {
     if (user) { // user fins
       user.comparePassword(req.body.OldPassword, function (err, isMatch) {
           if (isMatch && !err) {
-            res.send(200, data);
+            //res.send(200, data);
             db.User.update({
               firstName: req.body.FirstName,
               lastName: req.body.LastName,
               password: req.body.NewPassword
               },{where: {id: req.body.UserId}})
               .then(function(result){
-              console.log('############', result)
+                console.log('result - ', result);
+                res.status(200).send({lastName: req.body.LastName, firstName: req.body.FirstName});
                });
           }else {
             res.send(400,'Old password wrong');

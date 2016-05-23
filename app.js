@@ -5,6 +5,7 @@ var express = require('express'),
     db = require('./db/index');
 var cookieParser = require('cookie-parser');
 var busboy = require('connect-busboy');
+var path = require('path');
 ///----------------------------------------------------------------
 var jwt = require('jsonwebtoken');
 var expressJWT = require('express-jwt');
@@ -32,6 +33,10 @@ server.listen('9000', '0.0.0.0', function () {
     console.log('Express server listening on %d, in %s mode', '9000', app.get('env'));
 });
 
+
+app.get('/uploads/:filename', function (req, res) {
+  res.sendfile(path.resolve('./uploads/' + req.params.filename));
+});
 
 
 function allowCrossDomain(req, res, next) {

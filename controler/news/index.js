@@ -15,39 +15,14 @@ var path = require('path');
 var router = express.Router();
 
 //////app.use(expressJWT({secret:'verySecretWord'}).unless({path:['/addUsername']}))
-//router.get('/getNews', function(req, res) {
-//  var db = req.app.get('db');
-//  console.log('/______--', req.body,req.query.userId);
-//  db.News.findAll({where: {UserId: req.query.userId}}).then(
-//    function (result) {
-//      var str=result[0].imgURL.split('uploads/');
-//      console.log('/*str/*--', str);
-//      var loadFrom = path.join(__dirname + '/../../uploads/'+str[1]);
-//      console.log('/*loadFrom/*--', loadFrom);
-//      console.log('/*result[0].imgURL*/*--', result[0].imgURL);
-//
-//      //var options = {
-//      //  dotfiles: 'deny',
-//      //  headers: {
-//      //    'x-timestamp': Date.now(),
-//      //    'x-sent': true
-//      //  }
-//      //};
-//      //console.log('/*/*/*/*/*--', result[0].imgURL);
-//     // res.type('png');
-////      res.contentType(filename);
-//      res.sendFile(loadFrom,function(err){
-//        if (err) {
-//          console.log('__/%^__',err);
-//          res.status(err.status).end();
-//        }
-//        else {
-//          console.log('Sent:', str[1]);
-//        }
-//      });
-//
-//    }); //then
-//});//get
+router.get('/getNews', function(req, res) {
+  var db = req.app.get('db');
+  console.log('/______--', req.body,req.query.userId);
+  db.News.findAll({where: {UserId: req.query.userId}}).then(
+    function (result) {
+      res.send(result)
+    }); //then
+});
       ///res.end('hello,world\nkeesun,hi', 'UTF-8');
       //res.status(200).send({qqz:'dada'});
       /*var token= jwt.sign({payload: req.body.email},'verySecretWord');
