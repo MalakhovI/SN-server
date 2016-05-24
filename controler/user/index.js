@@ -7,14 +7,11 @@ var jwt = require('jsonwebtoken');
 var expresJWT = require('express-jwt');
 var bcrypt = require('bcryptjs');
 
-//var controller = require('./account.controller');
-
 var router = express.Router();
-//app.use(expressJWT({secret:'verySecretWord'}).unless({path:['/addUsername']}))
 
 router.put('/updateUserProf', function(req, res) {
   var db = req.app.get('db');
-  console.log("ffffffffffffff__", req.body);
+
 
 
  /**/ db.User.findOne({where: {id: req.body.UserId}}
@@ -30,7 +27,6 @@ router.put('/updateUserProf', function(req, res) {
               password: req.body.NewPassword
               },{where: {id: req.body.UserId}})
               .then(function(result){
-                console.log('result - ', result);
                 res.status(200).send({lastName: req.body.LastName, firstName: req.body.FirstName});
                });
           }else {
@@ -41,25 +37,20 @@ router.put('/updateUserProf', function(req, res) {
 
     })//then
     .catch(function (error) {
-      console.log('error - ', error);
-      res.status(400).send('Upd$$$$$$$ate fail');
+
+      res.status(400).send('Update fail');
     });/**/
 })//updateUserProf
 
-//router.post('/addUsername',expresJWT({secret: 'verySecretWord'}), function(req, res){
 router.post('/addUsername', function(req, res){
-    console.log('$$$$$$$$$$$$', req.body);
-
   var db = req.app.get('db');
-
-  // в хидерах Authorization bearer
 
   db.User.findOne({where: {email: req.body.Email}}
   ).then(function (user) {
     if (user) {
       return res.status(400).send('This email already used. Please enter another or SignIn.');
     }
-  })//then
+  })
 
     db.User.create({
       firstName: req.body.FirstName,
@@ -67,20 +58,14 @@ router.post('/addUsername', function(req, res){
       email:req.body.Email,
       password: req.body.Password
       }).then(function(result){
-        console.log('^^^^^^^6', result);
         res.send(result)
     }).catch(function(error){
-      console.log('error - ', error);
       res.status(400).send('Your email is incorrect. Please use format username@mail.com')
-    })/**/
-  //res.send({fsdfsdfsdf :'sну добавили юзера ОК!'})
-});
-//router.post('/createAccount', controller.createAccount);
+    })
 
-router.post('/removeAll',expresJWT({secret: 'verySecretWord'}), function(req, res){
-  console.log('//////////', req.body);
-  res.send({msg: 'МЫ все удалили!!!'});
 });
+
+
 
 router.post('/sigIn', function(req,res){
   if(!req.body.email){
@@ -107,24 +92,6 @@ router.post('/sigIn', function(req,res){
       } //cb
       ) //comparePassword
       }) //then
-
-/*
-    db.User.findAll({ where: { password: req.body.password, email: req.body.email} }).then(
-    function(result) {
-      //console.log('email--',result[0].dataValues.email);
-      var token= jwt.sign({payload: req.body.email},'verySecretWord');
-      res.status(200).send(token);
-//    })  .catch(error => { // ecmas 6
-    })  .catch(function(error) {
-    res.send('Пользователь с такими почтой/паролем  не найден!');
-    //console.log(error); // Error: Not Found
-});*/
-
-    //console.log('____', db.User);
-  //});
-
-  //})/**/
-
 
 })//sigIn;
 
