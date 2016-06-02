@@ -5,7 +5,7 @@ var fs = require('fs');
 var path = require('path');
 var Sequelize = require('Sequelize');
 
-var sequelize = new Sequelize('UserDB', 'Ivan', 'bars+951', {
+var sequelize = new Sequelize('UserDB', 'Malakhov_Ivan', 'bars+951', {
     host: 'localhost',
     dialect: 'postgres',
 

@@ -6,6 +6,7 @@ var express = require('express'),
 var cookieParser = require('cookie-parser');
 var busboy = require('connect-busboy');
 var path = require('path');
+var fs = require('fs');
 ///----------------------------------------------------------------
 var jwt = require('jsonwebtoken');
 var expressJWT = require('express-jwt');
@@ -35,14 +36,26 @@ server.listen('9000', '0.0.0.0', function () {
 
 
 app.get('/uploads/:filename', function (req, res) {
-  res.sendfile(path.resolve('./uploads/' + req.params.filename));
+
+    fs.access('./uploads/' + req.params.filename, fs.F_OK, function(err) {
+        if (!err) {
+
+            //fs.unlinkSync(fileLocation+'\\'+filename);
+            res.sendfile(path.resolve('./uploads/' + req.params.filename));
+        } else {
+            // It isn't accessible
+            console.log('GET --- нет  такая файла ! !!!!!');
+            ///res.status(400).send({err: 'GET --- нет  такая файла ! !!!!!'})
+        }
+    });
+
 });
 
 
 function allowCrossDomain(req, res, next) {
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Methods', 'POST, GET, OPTIONS, PUT, DELETE');
-    res.header('Access-Control-Allow-Headers', 'Content-Type, Cookie, Authorization');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Cookie, Authorization, Cache-Control, X-Requested-With');
     res.header("Access-Control-Allow-Credentials", "true");
     next();
 }

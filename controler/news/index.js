@@ -16,8 +16,22 @@ router.get('/getNews', function(req, res) {
     }); //then
 });
 
+router.post('/createFile', function(req, res){
+  //console.log("req --- ",req.body, req);
+  if (req.busboy) {
+    req.pipe(req.busboy);
+    req.busboy.on('file', function (fieldname, file, filename) {
+
+      var saveTo = path.join(__dirname + '/../../uploads', path.basename(filename));
+      file.pipe(fs.createWriteStream(saveTo));
+      res.status(200).send({fileName: filename})
+    })
+  }
+
+});
 router.post('/createNews',expresJWT({secret: 'verySecretWord'}), function(req, res){
   var db = req.app.get('db');
+  console.log("req -!-- ");
   var link;
   if(req.body.link!='')
     {link ='http://127.0.0.1:9000/uploads/' + req.body.link}
@@ -34,36 +48,37 @@ router.post('/createNews',expresJWT({secret: 'verySecretWord'}), function(req, r
 
 });
 
-router.post('/createFile', function(req, res){
-  if (req.busboy) {
-    req.pipe(req.busboy);
-    req.busboy.on('file', function (fieldname, file, filename) {
-
-      var saveTo = path.join(__dirname + '/../../uploads', path.basename(filename));
-      file.pipe(fs.createWriteStream(saveTo));
-      res.send({fileName: filename})
-    })
-  }
-
-});
-
 router.delete('/removeNews', function(req, res){
 
   /**/var db = req.app.get('db');
   db.News.findOne({where: {id: req.query.id}}
   ).then(function (user) {
 
+
+
+
       if(user.imgURL){
         var fileLocation=  path.join(__dirname + '/../../uploads');
         var url=user.imgURL;
         var filename=url.split('/uploads/')[1];
-        fs.unlinkSync(fileLocation+'\\'+filename);
-      }
+        console.log(fileLocation+'\\'+filename);
 
-      db.News.destroy({where: {id: req.query.id}}
+        fs.access(fileLocation+'\\'+filename, fs.F_OK, function(err) {
+          if (!err) {
+
+            fs.unlinkSync(fileLocation+'\\'+filename);
+          } else {
+            // It isn't accessible
+            console.log('нет  такая файла ! !!!!!');
+          }
+        });
+        //fs.unlinkSync(fileLocation+'\\'+filename);
+      }//user.imgURL
+
+    /**/  db.News.destroy({where: {id: req.query.id}}
       ).then(function (news) {
           res.status(200).send("News removed success");
-        });
+        });/**/
     });
 
 });
