@@ -16,15 +16,31 @@ router.get('/getNews', function(req, res) {
     }); //then
 });
 
+//generate Pseudo-Random id
+function guid() {
+  function s4() {
+    return Math.floor((1 + Math.random()) * 0x10000)
+      .toString(16)
+      .substring(1);
+  }
+  return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+    s4() + '-' + s4() + s4() + s4();
+}
+
 router.post('/createFile', function(req, res){
-  //console.log("req --- ",req.body, req);
+
   if (req.busboy) {
     req.pipe(req.busboy);
     req.busboy.on('file', function (fieldname, file, filename) {
 
-      var saveTo = path.join(__dirname + '/../../uploads', path.basename(filename));
+      // generate short Pseudo-unique names for uploaded files + added file extension
+      let str=filename.split('.');
+      let ext = str[str.length-1];
+      let ufilename = guid()+'.'+ext;
+
+      let saveTo = path.join(__dirname + '/../../uploads', path.basename(ufilename));
       file.pipe(fs.createWriteStream(saveTo));
-      res.status(200).send({fileName: filename})
+      res.status(200).send({fileName: ufilename})
     })
   }
 
@@ -53,9 +69,6 @@ router.delete('/removeNews', function(req, res){
   /**/var db = req.app.get('db');
   db.News.findOne({where: {id: req.query.id}}
   ).then(function (user) {
-
-
-
 
       if(user.imgURL){
         var fileLocation=  path.join(__dirname + '/../../uploads');
